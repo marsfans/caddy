@@ -64,7 +64,7 @@ jobs:
           export GOOS=$GOOS GOARCH=amd64 
           xcaddy build --output caddy-"$GOOS"-amd64 \
             --with github.com/caddyserver/ntlm-transport \
-            #--with github.com/caddyserver/forwardproxy \
+            # --with github.com/caddyserver/forwardproxy \
             --with github.com/imgk/caddy-trojan  \
             --with github.com/mholt/caddy-webdav \
             --with github.com/caddy-dns/cloudflare
