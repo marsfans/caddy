@@ -62,12 +62,13 @@ jobs:
         run: |
           # GOOS=$GOOS go build -trimpath -o caddy-"$GOOS"-amd64 2> /dev/null \
           export GOOS=$GOOS GOARCH=amd64 
-          xcaddy build --output caddy-"$GOOS"-amd64 \
+          xcaddy build  \
+            --with github.com/abiosoft/caddy-exec \
             --with github.com/caddyserver/ntlm-transport \
-            # --with github.com/caddyserver/forwardproxy \
             --with github.com/imgk/caddy-trojan  \
             --with github.com/mholt/caddy-webdav \
-            --with github.com/caddy-dns/cloudflare
+            --with github.com/caddy-dns/cloudflare \
+            --output caddy-"$GOOS"-amd64
           if [ $? -ne 0 ]; then
             echo "::warning ::$GOOS Build Failed"
             exit 0
