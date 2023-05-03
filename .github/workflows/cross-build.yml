@@ -61,7 +61,8 @@ jobs:
         working-directory: ./cmd/caddy
         run: |
           # GOOS=$GOOS go build -trimpath -o caddy-"$GOOS"-amd64 2> /dev/null \
-          xcaddy build --output caddy-"$GOOS"-amd64 2> /dev/null \
+          export GOOS=$GOOS GOARCH=amd64 
+          xcaddy build --output caddy-"$GOOS"-amd64 \
             --with github.com/caddyserver/ntlm-transport \
             --with github.com/caddyserver/forwardproxy \
             --with github.com/imgk/caddy-trojan  \
