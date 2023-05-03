@@ -22,7 +22,7 @@ jobs:
         # Set the minimum Go patch version for the given Go minor
         # Usable via ${{ matrix.GO_SEMVER }}
         - go: '1.20'
-          GO_SEMVER: '~1.20.1'
+          GO_SEMVER: '~1.20.3'
 
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -45,7 +45,13 @@ jobs:
           go env
           printf "\n\nSystem environment:\n\n"
           env
-
+      - name: install xcaddy
+        run: |
+          sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https \
+          curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-xcaddy-archive-keyring.gpg \
+          curl -1sLf 'https://dl.cloudsmith.io/public/caddy/xcaddy/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-xcaddy.list \
+          sudo apt update \
+          sudo apt install xcaddy
       - name: Run Build
         env:
           CGO_ENABLED: 0
@@ -59,3 +65,10 @@ jobs:
             echo "::warning ::$GOOS Build Failed"
             exit 0
           fi
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          # Artifact name
+          name: caddy-"$GOOS"-amd64
+          # A file, directory or wildcard pattern that describes what to upload
+          path: ./cmd/caddy/caddy-"$GOOS"-amd64
